@@ -1,14 +1,21 @@
-//
-//  main.cpp
-//  test
-//
-//  Created by Полина on 14.09.2023.
-//
-
 #include <iostream>
+#include <set>
+using namespace std;
 
-int main(int argc, const char * argv[]) {
-    // insert code here...
-    std::cout << "Hello, World!\n";
+string devowel (string s) {
+    string s1 = "";
+    set <char> st{'e','u','i','o','a','E','U','I','O','A'};
+    for (int i = 0; i < s.length(); ++i) {
+        if (st.find(s[i]) == st.end()) {
+            s1 += s[i];
+        }
+    }
+    return s1;
+}
+
+int main() {
+    string s;
+    getline(cin, s);
+    cout << devowel(s) << endl;
     return 0;
 }
