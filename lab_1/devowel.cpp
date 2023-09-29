@@ -7,9 +7,9 @@ using std::set;
 string devowel (string s) {
     string s1 = "";
     set <char> st{'e','u','i','o','a','E','U','I','O','A'};
-    for (int i = 0; i < s.length(); ++i) {
-        if (st.find(s[i]) == st.end()) {
-            s1 += s[i];
+    for (const auto &el : s) {
+        if (st.find(el) == st.end()) {
+            s1 += el;
         }
     }
     return s1;
