@@ -4,7 +4,7 @@
 
 using std::set;
 
-string devowel (string s) {
+string devowel (string const &s) {
     string s1 = "";
     set <char> st{'e','u','i','o','a','E','U','I','O','A'};
     for (const auto &el : s) {

@@ -5,6 +5,6 @@
 
 using std::string;
 
-string devowel(string);
+string devowel(string const&);
 
 #endif // DEVOWEL_H
