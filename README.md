@@ -3,3 +3,6 @@
 Структура репозитория:
 * `lab_1/` - лабораторная #1
 * `lab_2/` - лабораторная #2
+
+Установка зависимостей:
+* git clone https://github.com/google/googletest.git
