@@ -6,3 +6,10 @@
 
 Установка зависимостей:
 * git clone https://github.com/google/googletest.git
+
+Сборка:
+```sh
+export CXX=/usr/bin/clang++
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug
+make -C build
+```
