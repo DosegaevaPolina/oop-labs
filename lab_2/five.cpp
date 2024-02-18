@@ -17,7 +17,7 @@ Five::~Five() noexcept {
 }
 
 
-void Five::check_digit(unsigned char d) {
+void Five::check_digit_and_throw(unsigned char d) {
   if ('0' <= d && d <= '4') return;
   stringstream what_stream;
   what_stream << "Your symbol (" << d << ") is not in five-digit number system!";
@@ -28,7 +28,7 @@ void Five::check_digit(unsigned char d) {
 
 Five::Five(const size_t &n, unsigned char d) {
   if (d == 0) d = '0';
-  check_digit(d);
+  check_digit_and_throw(d);
 
   size = n;
   digits = new unsigned char[size];
@@ -42,7 +42,7 @@ Five::Five(const initializer_list<unsigned char> &il) {
 
   size_t pos = 0;
   for (auto it = crbegin(il); it != crend(il); ++it, ++pos) {
-    check_digit(*it);
+    check_digit_and_throw(*it);
     digits[pos] = *it;
   }
 }
@@ -54,7 +54,7 @@ Five::Five(const string &s) {
   
   size_t pos = 0;
   for (auto it = crbegin(s); it != crend(s); ++it, ++pos) {
-    check_digit(*it);
+    check_digit_and_throw(*it);
     digits[pos] = *it;
   }
 
