@@ -1,29 +1,59 @@
 #include "five.hpp"
 
 #include <iostream>
+#include <sstream>
 
 using namespace std;
 
 int main() {
-  cout << Five(4, '1') << endl;
-  cout << Five({'2', '1', '0'}) << endl << endl;
-  cout << Five("4321") << endl << endl;
+  string result_str = "result: ";
+  
+  try {
+    string first, second;
+    cout << "(first number)\n> ";
+    cin >> first;
+    Five num1 = Five(first);
 
-  Five f0 = Five("123");
-  Five f1 = f0;
-  cout << f1 << endl << endl;
+    cout << "(second number)\n> ";
+    cin >> second;
+    Five num2 = Five(second);
 
-  Five f2 = std::move(f1);
-  cout << f2 << endl << endl;
+    char op;
+    cout << "(operation: +/-/>/</=)\n> ";
+    cin >> op;
 
-  Five f3;
-  f3 = f2;
-  cout << f3 << endl << endl;
 
-  cout << Five("44") + Five("401") << endl;
-  cout << Five("1000") - Five("401") << endl;
+    switch (op) {
+    case '+':
+      result_str += (num1 + num2).to_string();
+      break;
 
-  cout << (Five("12") == Five("12")) << endl << endl;
-  cout << (Five("123") < Five("124")) << endl << endl;
-  cout << (Five("12") > Five("1")) << endl << endl;
+    case '-':
+      result_str += (num1 - num2).to_string();
+      break;
+
+    case '>':
+      result_str += num1 > num2 ? "True" : "False";
+      break;
+
+    case '<':
+      result_str += num1 < num2 ? "True" : "False";
+      break;
+
+    case '=':
+      result_str += num1 == num2 ? "True" : "False";
+      break;
+
+    default:
+      result_str = "No such operation";
+      break;
+    }
+
+    cout << result_str << endl;
+  } catch (const invalid_argument &ex) {
+    cout << "Invalid argument exception caught: " << ex.what() << endl;
+  }
+
+  return 0;
 }
+

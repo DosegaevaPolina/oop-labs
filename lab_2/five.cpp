@@ -169,7 +169,7 @@ size_t Five::count_significants() const {
 
 Five Five::operator-(const Five &o) {
   if (o.size > size)
-    throw std::invalid_argument("The result will be negative!\n");
+    throw std::invalid_argument("The result will be negative!");
 
   Five res = Five(*this);
   bool carry = false;
@@ -180,7 +180,7 @@ Five Five::operator-(const Five &o) {
     if (carry) res.digits[i] += 5;
   }
   if (carry)
-    throw std::invalid_argument("The result will be negative!\n");
+    throw std::invalid_argument("The result will be negative!");
 
   size_t newsize = res.count_significants();
   res.resize(newsize);
