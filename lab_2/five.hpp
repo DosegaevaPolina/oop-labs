@@ -8,6 +8,7 @@ class Five {
 private:
   unsigned char *digits;
   size_t size;
+  void check_digit(unsigned char d);
   int get_digit(size_t index) const;
   void resize(size_t new_size);
   size_t count_significants() const;

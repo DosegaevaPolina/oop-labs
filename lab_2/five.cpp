@@ -17,10 +17,11 @@ Five::~Five() noexcept {
 }
 
 
-void check_digit(unsigned char d) {
+void Five::check_digit(unsigned char d) {
   if ('0' <= d && d <= '4') return;
   stringstream what_stream;
   what_stream << "Your symbol (" << d << ") is not in five-digit number system!";
+  delete[] digits;
   throw invalid_argument(what_stream.str());
 }
 
@@ -84,6 +85,7 @@ Five::Five(Five &&o) {
 
 string Five::to_string() const {
   string res = "";
+  if (size == 0) return res;
   for (ssize_t i = size-1; i >= 0; --i)
     res += digits[i];
   return res;
