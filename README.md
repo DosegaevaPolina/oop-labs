@@ -10,6 +10,11 @@
 Сборка:
 ```sh
 export CXX=/usr/bin/clang++
-cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug -DCODE_COVERAGE=ON
 make -C build
+```
+
+Генерация покрытия (на примере цели five):
+```sh
+make -C build ccov-five
 ```
