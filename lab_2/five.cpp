@@ -28,10 +28,9 @@ void Five::check_digit_and_throw(unsigned char d) {
 
 Five::Five(const size_t &n, unsigned char d) {
   if (d == 0) d = '0';
-  check_digit_and_throw(d);
-
   size = n;
   digits = new unsigned char[size];
+  check_digit_and_throw(d);
   fill_n(digits, size, d);
 }
 
@@ -57,8 +56,6 @@ Five::Five(const string &s) {
     check_digit_and_throw(*it);
     digits[pos] = *it;
   }
-
-//  cout << "constructed from string\n";
 }
 
 
@@ -67,8 +64,6 @@ Five::Five(const Five &o) {
   digits = new unsigned char[size];
 
   copy(o.digits, o.digits + o.size, digits);
-
-//  cout << "constructed from copy-constructor\n";
 }
 
 // move-конструктор
@@ -78,8 +73,6 @@ Five::Five(Five &&o) {
 
   o.digits = new unsigned char[0];
   o.size = 0;
-
-//  cout << "constructed from move-constructor\n";
 }
 
 
@@ -104,7 +97,7 @@ size_t Five::get_size() const {
 
 // Арифметические операции
 
-Five &Five::operator=(const Five &o) {
+Five& Five::operator=(const Five &o) {
   // Guard self assignment
   if (this == &o)
     return *this;
@@ -117,7 +110,21 @@ Five &Five::operator=(const Five &o) {
   } 
 
   copy(o.digits, o.digits + o.size, digits);
-//  cout << "copied from =\n";
+  return *this;
+}
+
+// move assignment
+Five& Five::operator=(Five &&o) {
+  if (this == &o) 
+    return *this;
+
+  delete[] digits;
+  digits = o.digits;
+  size = o.size;
+
+  o.digits = new unsigned char[0];
+  o.size = 0;
+
   return *this;
 }
 
@@ -138,7 +145,7 @@ void Five::resize(size_t newsize) {
 
 
 Five Five::operator+(const Five &o) {
-  Five res = Five(max(size, o.size));
+  Five res(max(size, o.size));
 
   int rem = 0;
   for (size_t i = 0; i < res.size; ++i) {
@@ -171,7 +178,7 @@ Five Five::operator-(const Five &o) {
   if (o.size > size)
     throw std::invalid_argument("The result will be negative!");
 
-  Five res = Five(*this);
+  Five res(*this);
   bool carry = false;
   for (size_t i = 0; i < res.size; ++i) {
     res.digits[i] = get_digit(i) - o.get_digit(i) + '0';

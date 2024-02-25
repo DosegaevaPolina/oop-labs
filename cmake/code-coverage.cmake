@@ -391,6 +391,7 @@ function(target_code_coverage TARGET_NAME)
             -show-line-counts-or-regions
             -output-dir=${CMAKE_COVERAGE_OUTPUT_DIRECTORY}/${target_code_coverage_COVERAGE_TARGET_NAME}
             -format="html" ${EXCLUDE_REGEX}
+            -show-branches=count
           DEPENDS ccov-processing-${target_code_coverage_COVERAGE_TARGET_NAME})
 
       elseif(CMAKE_C_COMPILER_ID MATCHES "GNU" OR CMAKE_CXX_COMPILER_ID MATCHES

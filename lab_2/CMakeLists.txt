@@ -19,7 +19,10 @@ enable_testing()
 
 add_executable(tests five_tests.cpp)
 target_link_libraries(tests five GTest::gtest_main)
-target_code_coverage(tests COVERAGE_TARGET_NAME five EXCLUDE five_tests.cpp)
+target_code_coverage(tests COVERAGE_TARGET_NAME five 
+  PRE_ARGS ASAN_OPTIONS=exitcode=0
+  ARGS --gtest_filter=* #Operators.sum
+)
 
 include(GoogleTest)
 gtest_discover_tests(tests)

@@ -25,7 +25,8 @@ public:
   string to_string() const;
   size_t get_size() const;
 
-  Five &operator=(const Five &o);
+  Five& operator=(const Five &o);
+  Five& operator=(Five &&o);
   Five operator+(const Five &o);
   Five operator-(const Five &o);
 
