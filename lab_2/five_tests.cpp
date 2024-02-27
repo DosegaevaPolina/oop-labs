@@ -14,6 +14,10 @@ TEST(Constructors, ntimes) {
   EXPECT_EQ(num.to_string(), "1111");
   EXPECT_EQ(num.get_size(), 4);
 
+  num = Five(4, '0');
+  EXPECT_EQ(num.to_string(), "0");
+  EXPECT_EQ(num.get_size(), 1);
+
   EXPECT_ANY_THROW(Five(4, '9'));
 }
 
@@ -27,7 +31,7 @@ TEST(Constructors, move) {
 
 
 TEST(Constructors, list) {
-  Five num({'4', '2'});
+  Five num({'0', '0', '4', '2'});
   EXPECT_EQ(num.get_size(), 2);
   EXPECT_EQ(num.to_string(), "42");
 
@@ -47,6 +51,10 @@ TEST(Constructors, string) {
   Five empty("");
   EXPECT_EQ(empty.to_string(), "");
   EXPECT_EQ(empty.get_size(), 0);
+
+  num = Five("0042");
+  EXPECT_EQ(num.to_string(), "42");
+  EXPECT_EQ(num.get_size(), 2);
 
   EXPECT_ANY_THROW(Five("-42"));  // '-' < '0'
   EXPECT_ANY_THROW(Five("b42"));  // 'b' > '4'
@@ -70,6 +78,12 @@ TEST(Operators, ostream) {
 }
 
 
+TEST(Operators, unsigned_long) {
+  Five num("42");  // 5*4+2 == 22
+  EXPECT_EQ((unsigned long)num, 22);
+}
+
+
 TEST(Operators, sum) {
   EXPECT_EQ((Five("3") + Five("4")).to_string(), "12");
   EXPECT_EQ((Five("0") + Five("4")).to_string(), "4");
@@ -79,7 +93,7 @@ TEST(Operators, sum) {
 TEST(Operators, sub) {
   EXPECT_EQ((Five("10") - Five("1")).to_string(), "4");
   EXPECT_EQ((Five("1") - Five("1")).to_string(), "0");
-  EXPECT_EQ((Five("") - Five("")).to_string(), "");
+  EXPECT_ANY_THROW(Five("") - Five(""));
   EXPECT_ANY_THROW(Five("2") - Five("42"));  // o.size > size
   EXPECT_ANY_THROW(Five("2") - Five("4"));
 }

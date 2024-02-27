@@ -24,6 +24,7 @@ public:
 
   string to_string() const;
   size_t get_size() const;
+  operator unsigned long int() const;
 
   Five& operator=(const Five &o);
   Five& operator=(Five &&o);

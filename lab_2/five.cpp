@@ -28,6 +28,12 @@ void Five::check_digit_and_throw(unsigned char d) {
 
 Five::Five(const size_t &n, unsigned char d) {
   if (d == 0) d = '0';
+  if (d == '0') {
+    size = 1;
+    digits = new unsigned char[1];
+    digits[0] = d;
+    return;
+  }
   size = n;
   digits = new unsigned char[size];
   check_digit_and_throw(d);
@@ -44,6 +50,13 @@ Five::Five(const initializer_list<unsigned char> &il) {
     check_digit_and_throw(*it);
     digits[pos] = *it;
   }
+
+  // убираем лидирующие нули
+  size_t newsize = count_significants();
+  if (newsize != size) {
+    size = newsize;
+    resize(newsize);
+  }
 }
 
 
@@ -55,6 +68,13 @@ Five::Five(const string &s) {
   for (auto it = crbegin(s); it != crend(s); ++it, ++pos) {
     check_digit_and_throw(*it);
     digits[pos] = *it;
+  }
+
+  // убираем лидирующие нули
+  size_t newsize = count_significants();
+  if (newsize != size) {
+    size = newsize;
+    resize(newsize);
   }
 }
 
@@ -94,6 +114,16 @@ size_t Five::get_size() const {
   return size;
 }
 
+
+Five::operator unsigned long int() const {
+  unsigned long n = 0;
+  unsigned long base = 1;
+  for (size_t i = 0; i < size; ++i) {
+    n += base * (digits[i] - '0');
+    base *= 5;
+  }
+  return n;
+}
 
 // Арифметические операции
 
@@ -145,7 +175,8 @@ void Five::resize(size_t newsize) {
 
 
 Five Five::operator+(const Five &o) {
-  Five res(max(size, o.size));
+  Five res;
+  res.resize(max(size, o.size));
 
   int rem = 0;
   for (size_t i = 0; i < res.size; ++i) {
@@ -175,6 +206,8 @@ size_t Five::count_significants() const {
 
 
 Five Five::operator-(const Five &o) {
+  if (size == 0)
+    throw invalid_argument("Object is not initialized!");
   if (o.size > size)
     throw std::invalid_argument("The result will be negative!");
 
