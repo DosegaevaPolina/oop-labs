@@ -10,3 +10,4 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 add_subdirectory(googletest)
 add_subdirectory(lab_2)
+add_subdirectory(lab_3)
