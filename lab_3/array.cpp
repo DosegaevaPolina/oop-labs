@@ -17,7 +17,8 @@ Figure* Array::operator[](int idx) {
 double Array::area() const {
   double sum = 0;
   for (int i = 0; i < size; ++i) {
-    sum += (double)*data[i];
+    if (data[i])
+      sum += (double)*data[i];
   }
   return sum;
 }
@@ -34,8 +35,8 @@ std::ostream &operator<<(std::ostream &os, const Array &a) {
 }
 
 void Array::delete_at(int idx) {
-  delete data[idx];
-  data[idx] = nullptr;
+  if (0 <= idx && idx < size)
+    data[idx] = nullptr;
 }
 
 void Array::set(int idx, Figure *other) {

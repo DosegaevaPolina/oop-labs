@@ -47,5 +47,6 @@ int main() {
 
   Pentagon p2;
   p2 = p;
-  std::cout << p2;
+  std::cout << p2 << "\n\n"; 
+  std::cout.flush();
 }
