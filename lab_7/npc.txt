@@ -1,0 +1,4 @@
+Bear Teddy 1 1
+Elf Legolas 2 2
+Rogue Garry 15 15
+Rogue Jerry 17 17
