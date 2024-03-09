@@ -25,7 +25,7 @@ std::optional<NPC*> Editor::from_string(const string &serialized) const {
   if (!(0 <= y && y <= Y-1))
     return {};
 
-  Spawner *spawner = Spawner::from_string(type_name, std::make_pair(0, X-1), std::make_pair(0, Y-1));
+  Spawner *spawner = Spawner::from_string(type_name, map);
   if (!spawner)
     return {};
   NPC* res = spawner->spawn(name, x, y);

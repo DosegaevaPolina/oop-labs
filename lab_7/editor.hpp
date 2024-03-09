@@ -10,22 +10,21 @@
 
 class AbstractObserver;
 
-#define X 80
-#define Y 40
 
 class Editor {
 private:
   std::map<std::string, NPC*> data;
   std::list<AbstractObserver*> observer_list;
   AbstractObserver *stdout_observer, *log_observer;
-  char map[Y][X];
-  inline static const char background_symbol = '.';
 
   std::optional<NPC*> from_string(const string &serialized) const; 
   void from_stream(std::istream &in);
   void update_map();
 
 public:
+  inline static const char background_symbol = BG;
+  char map[Y][X];
+
   Editor(const string &path, const string &log_path);
   ~Editor();
   void add_npc(NPC *npc);

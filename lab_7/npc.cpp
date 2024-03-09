@@ -1,4 +1,5 @@
 #include "npc.hpp"
+#include "map.hpp"
 
 std::string Spawner::rand_name() {
   const char alphanum[] = "0123456789"
@@ -17,21 +18,63 @@ std::string Spawner::rand_name() {
 }
 
 int Spawner::rand_x() const {
-  return x_range.first + (rand() % (x_range.second - x_range.first + 1));
+  return rand() % X;
 }
 
 int Spawner::rand_y() const {
-  return y_range.first + (rand() % (y_range.second - y_range.first + 1));
+  return rand() % Y;
 }
 
-Spawner* Spawner::from_string(string type, int_pair x_range, int_pair y_range) {
+Spawner* Spawner::from_string(string type, const char (&map)[Y][X]) {
   if (type == Bear::type_name)
-    return new BearSpawner(x_range, y_range);
+    return new BearSpawner(map);
   if (type == Elf::type_name)
-    return new ElfSpawner(x_range, y_range);
+    return new ElfSpawner(map);
   if (type == Rogue::type_name)
-    return new RogueSpawner(x_range, y_range);
+    return new RogueSpawner(map);
   return nullptr;
+}
+
+Spawner* Spawner::random_spawner(const char (&map)[Y][X]) {
+  switch (rand() % 3) {
+  case 0:
+    return new BearSpawner(map);
+  case 1:
+    return new ElfSpawner(map);
+  case 2:
+    return new RogueSpawner(map);
+  }
+  return nullptr;
+}
+
+NPC* BearSpawner::spawn_random() const {
+  int x=-1, y=-1;
+  do {
+    x = rand_x();
+    y = rand_y();
+    // std::cout << "x: " << x << "\ty: " << y << std::endl;
+  } while (map[y][x] != BG);
+  return new Bear(rand_name(), x, y);
+}
+
+NPC* ElfSpawner::spawn_random() const {
+  int x=-1, y=-1;
+  do {
+    x = rand_x();
+    y = rand_y();
+    // std::cout << "x: " << x << "\ty: " << y << std::endl;
+  } while (map[y][x] != BG);
+  return new Elf(rand_name(), x, y);
+}
+
+NPC* RogueSpawner::spawn_random() const {
+  int x=-1, y=-1;
+  do {
+    x = rand_x();
+    y = rand_y();
+    // std::cout << "x: " << x << "\ty: " << y << std::endl;
+  } while (map[y][x] != BG);
+  return new Rogue(rand_name(), x, y);
 }
 
 int NPC::dist2(const NPC *other) const {

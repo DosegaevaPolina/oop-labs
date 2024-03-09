@@ -12,6 +12,12 @@ int main() {
   ed.add_npc(new Elf("Laslo", 3, 3));
   std::cout << ed << std::endl;
 
+  for (int i = 0; i < 16; ++i) {
+    Spawner *spawner = Spawner::random_spawner(ed.map);
+    ed.add_npc(spawner->spawn_random());
+    delete spawner;
+  }
+
   ed.print_map();
   ed.fight();
   std::cout << std::endl;

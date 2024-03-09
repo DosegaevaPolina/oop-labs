@@ -3,6 +3,7 @@
 #include <string>
 #include <iostream>
 #include <unistd.h>
+#include "map.hpp"
 
 using std::string;
 
@@ -127,52 +128,47 @@ using int_pair = std::pair<int,int>;
 // подклассы Spawner'a предоставляют реализацию этого метода
 class Spawner {
 protected:
-  int_pair x_range, y_range;
-
   static std::string rand_name();
   int rand_x() const;
   int rand_y() const;
 
 public:
-  Spawner(int_pair x_range, int_pair y_range) : x_range(x_range), y_range(y_range) {}
   virtual ~Spawner(){};
   virtual NPC* spawn(string name, int x, int y) const = 0;
   virtual NPC* spawn_random() const = 0;
-  static Spawner* from_string(string, int_pair, int_pair);
+  static Spawner* from_string(string, const char (&map)[Y][X]);
+  static Spawner* random_spawner(const char (&map)[Y][X]);
 };
 
 // конкретные Spawner'ы переопределяют фабричный метод для того, чтобы изменить тип получаемого NPC
 class BearSpawner : public Spawner {
-  using Spawner::Spawner;
+  const char (&map)[Y][X];
 public:
+  BearSpawner(const char (&map)[Y][X]) : map(map) {}
   NPC *spawn(string name, int x, int y) const override {
     return new Bear(name, x, y);
   }
-  NPC *spawn_random() const override {
-    return new Bear(rand_name(), rand_x(), rand_y());
-  }
+  NPC *spawn_random() const override;
 };
 
 class ElfSpawner : public Spawner {
-  using Spawner::Spawner;
+  const char (&map)[Y][X];
 public:
+  ElfSpawner(const char (&map)[Y][X]) : map(map) {}
   NPC *spawn(string name, int x, int y) const override {
     return new Elf(name, x, y);
   }
-  NPC *spawn_random() const override {
-    return new Elf(rand_name(), rand_x(), rand_y());
-  }
+  NPC *spawn_random() const override;
 };
 
 class RogueSpawner : public Spawner {
-  using Spawner::Spawner;
+  const char (&map)[Y][X];
 public:
+  RogueSpawner(const char (&map)[Y][X]) : map(map) {}
   NPC *spawn(string name, int x, int y) const override {
     return new Rogue(name, x, y);
   }
-  NPC *spawn_random() const override {
-    return new Elf(rand_name(), rand_x(), rand_y());
-  }
+  NPC *spawn_random() const override;
 };
 
 // конкретные Посетители реализуют несколько версий одного и того же алгоритма,
