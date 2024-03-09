@@ -1,6 +1,7 @@
 #include "editor.hpp"
 #include <sstream>
 #include <stdexcept>
+#include <thread>
 #include <utility>
 
 std::optional<NPC*> Editor::from_string(const string &serialized) const {
@@ -48,8 +49,8 @@ void Editor::print_map() {
   update_map();
   for (int y = 0; y < Y; ++y) {
     for (int x = 0; x < X; ++x)
-      std::cout << map[y][x];
-    std::cout << std::endl;
+      print(map[y][x]);
+    print('\n');
   }
 }
 
@@ -94,7 +95,7 @@ void Editor::from_stream(std::istream &in) {
 void Editor::add_npc(NPC *npc) {
   const auto [it_data, success] = data.insert({npc->name, npc});
   if (!success)
-    std::cout << "[WARNING] NPC with name \"" + npc->name + "\" already exists\n";
+    print("[WARNING] NPC with name \"", npc->name, "\" already exists\n");
 }
 
 void Editor::dump(const string &path) {
@@ -140,7 +141,10 @@ void Editor::fight() {
       if (!npc->alive || !other_npc->alive)
         continue;
 
-      npc->Accept(visitor, other_npc);
+      std::thread t([npc, visitor, other_npc]() {
+        npc->Accept(visitor, other_npc);
+      });
+      t.join();
       if (!npc->alive) Notify(other_npc->name + " killed " + npc->name);
       if (!other_npc->alive) Notify(npc->name + " killed " + other_npc->name);
     }

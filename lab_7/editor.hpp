@@ -1,8 +1,8 @@
 #pragma once
 
 #include "npc.hpp"
+#include "print.hpp"
 #include <fstream>
-#include <iostream>
 #include <map>
 #include <optional>
 #include <list>
@@ -68,7 +68,7 @@ public:
   }
 
   void Update(const std::string &msg) override {
-    std::cout << msg << std::endl;
+    print(msg, '\n');
   }
 
   void RemoveMeFromTheList() {

@@ -1,6 +1,6 @@
-#include <iostream>
 #include <thread>
 #include "editor.hpp"
+#include "print.hpp"
 
 
 int main() {
@@ -13,17 +13,20 @@ int main() {
   }
 
   ed.print_map();
-  ed.fight();
-  std::cout << std::endl;
+  print('\n');
 
   for (int i = 0; i < 10; ++i) {
-    ed.move_npcs();
-    ed.print_map();
-    ed.fight();
-    std::cout << std::endl;
+    std::thread t([](Editor &e) {
+      e.move_npcs();
+      e.fight();
+    }, std::ref(ed));
+    t.join();
+
+    print('\n');
     std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    ed.print_map();
   }
 
-  std::cout << "\nSurvivors:\n" << ed;
-  ed.dump("lab_6/out_npc.txt");
+  print("\nSurvivors:\n", ed);
+  ed.dump("lab_7/survived.txt");
 }
