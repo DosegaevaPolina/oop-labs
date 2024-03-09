@@ -12,6 +12,10 @@ int main() {
   std::cout << ed << std::endl;
   ed.dump("lab_6/out_npc.txt");
 
+  ed.print_map();
   ed.fight();
-  std::cout <<  std::endl << ed;
+  std::cout << std::endl;
+  ed.print_map();
+
+  std::cout << std::endl << ed;
 }

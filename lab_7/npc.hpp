@@ -38,6 +38,7 @@ public:
   virtual const string& type_str() const = 0;
   virtual const int get_velocity() const = 0;
   virtual const int get_range() const = 0;
+  virtual const char get_symbol() const = 0;
   virtual void Accept(Visitor *visitor, NPC *other) = 0;
 
   int dist2(const NPC *other) const;
@@ -57,6 +58,7 @@ public:
   inline static const string type_name = "Bear";
   inline static const int velocity = 5;
   inline static const int range = 10;
+  inline static const char symbol = 'B';
 
   Bear(string name, int x, int y) : NPC(name, x, y) {}
 
@@ -65,6 +67,8 @@ public:
   const int get_velocity() const override { return velocity; }
   
   const int get_range() const override { return range; }
+
+  const char get_symbol() const override { return symbol; }
 
   void Accept(Visitor *visitor, NPC *other) override {
     // std::cout << "Bear accepting visitor\n";
@@ -77,6 +81,7 @@ public:
   inline static const string type_name = "Elf";
   inline static const int velocity = 10;
   inline static const int range = 50;
+  inline static const char symbol = 'e';
 
   Elf(string name, int x, int y) : NPC(name, x, y) {}
 
@@ -85,6 +90,8 @@ public:
   const int get_velocity() const override { return velocity; }
   
   const int get_range() const override { return range; }
+
+  const char get_symbol() const override { return symbol; }
 
   void Accept(Visitor *visitor, NPC *other) override {
     // std::cout << "Elf accepting visitor\n";
@@ -97,6 +104,7 @@ public:
   inline static const string type_name = "Rogue";
   inline static const int velocity = 10;
   inline static const int range = 10;
+  inline static const char symbol = 'r';
 
   Rogue(string name, int x, int y) : NPC(name, x, y) {}
 
@@ -105,6 +113,8 @@ public:
   const int get_velocity() const override { return velocity; }
   
   const int get_range() const override { return range; }
+
+  const char get_symbol() const override { return symbol; }
 
   void Accept(Visitor *visitor, NPC *other) override {
     // std::cout << "Rogue accepting visitor\n";

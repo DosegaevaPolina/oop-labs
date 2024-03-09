@@ -1,6 +1,7 @@
 #include "editor.hpp"
 #include <sstream>
 #include <stdexcept>
+#include <utility>
 
 std::optional<NPC*> Editor::from_string(const string &serialized) const {
   std::istringstream iss(serialized);
@@ -16,15 +17,15 @@ std::optional<NPC*> Editor::from_string(const string &serialized) const {
   iss >> x;
   if (iss.fail())
     return {};
-  if (!(x_range.first <= x && x <= x_range.second))
+  if (!(0 <= x && x < X))
     return {};
   iss >> y;
   if (iss.fail())
     return {};
-  if (!(y_range.first <= y && y <= y_range.second))
+  if (!(0 <= y && y < Y))
     return {};
 
-  Spawner *spawner = Spawner::from_string(type_name, x_range, y_range);
+  Spawner *spawner = Spawner::from_string(type_name, std::make_pair(0, X-1), std::make_pair(0, Y-1));
   if (!spawner)
     return {};
   NPC* res = spawner->spawn(name, x, y);
@@ -32,13 +33,24 @@ std::optional<NPC*> Editor::from_string(const string &serialized) const {
   return res;
 }
 
-Editor::Editor(const string &path, const string &log_path)
-    : x_range(std::make_pair(0, 500)), y_range(std::make_pair(0, 500)) {
+void Editor::update_map() {
+  for (int y = 0; y < Y; ++y)
+    for (int x = 0; x < X; ++x)
+      map[y][x] = background_symbol;
+
+  for (auto it = data.cbegin(); it != data.cend(); ++it) {
+    auto npc = it->second;
+    map[npc->y][npc->x] = npc->get_symbol();
+  }
+}
+
+Editor::Editor(const string &path, const string &log_path) {
   std::ifstream infile(path);
   if (!infile.is_open())
     throw std::invalid_argument(path + " - no such file");
 
   from_stream(infile);
+  update_map();
 
   stdout_observer = new StdoutObserver(*this);
   log_observer = new LogObserver(*this, log_path);
@@ -107,7 +119,19 @@ void Editor::fight() {
     else
       ++it;
   }
+
+  // обновляем карту
+  update_map();
+
   delete visitor;
+}
+
+void Editor::print_map() {
+  for (int y = 0; y < Y; ++y) {
+    for (int x = 0; x < X; ++x)
+      std::cout << map[y][x];
+    std::cout << std::endl;
+  }
 }
 
 void Editor::Attach(AbstractObserver *observer) { observer_list.push_back(observer); }

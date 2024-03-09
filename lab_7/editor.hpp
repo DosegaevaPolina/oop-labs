@@ -5,21 +5,25 @@
 #include <iostream>
 #include <map>
 #include <optional>
-#include <utility>
 #include <list>
 
 
 class AbstractObserver;
 
+#define X 40
+#define Y 20
+
 class Editor {
 private:
   std::map<std::string, NPC*> data;
-  std::pair<int,int> x_range, y_range;
   std::list<AbstractObserver*> observer_list;
   AbstractObserver *stdout_observer, *log_observer;
+  char map[Y][X];
+  inline static const char background_symbol = '.';
 
   std::optional<NPC*> from_string(const string &serialized) const; 
   void from_stream(std::istream &in);
+  void update_map();
 
 public:
   Editor(const string &path, const string &log_path);
@@ -28,6 +32,7 @@ public:
   friend std::ostream &operator<<(std::ostream &os, const Editor &ed);
   void dump(const string &path);
   void fight();
+  void print_map();
   void Attach(AbstractObserver *observer);
   void Detach(AbstractObserver *observer);
   void Notify(const string &msg);
