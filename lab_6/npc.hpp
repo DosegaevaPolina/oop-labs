@@ -25,7 +25,6 @@ public:
 
 // объявляем операции, которые должны выполнять все конкретные NPC
 class NPC {
-protected:
 public:
   string name;
   int x, y;
