@@ -2,7 +2,6 @@
 #include <shared_mutex>
 #include <sstream>
 #include <stdexcept>
-#include <thread>
 #include <utility>
 
 std::optional<NPC*> Editor::from_string(const string &serialized) const {
@@ -143,11 +142,7 @@ void Editor::fight() {
       if (!npc->alive || !other_npc->alive)
         continue;
 
-      std::thread t([npc, visitor, other_npc, this]() {
-        std::lock_guard<std::shared_mutex> l(data_mutex);
-        npc->Accept(visitor, other_npc);
-      });
-      t.join();
+      npc->Accept(visitor, other_npc);
       if (!npc->alive) Notify(other_npc->name + " killed " + npc->name);
       if (!other_npc->alive) Notify(npc->name + " killed " + other_npc->name);
     }
