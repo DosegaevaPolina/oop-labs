@@ -17,12 +17,12 @@ std::optional<NPC*> Editor::from_string(const string &serialized) const {
   iss >> x;
   if (iss.fail())
     return {};
-  if (!(0 <= x && x < X))
+  if (!(0 <= x && x <= X-1))
     return {};
   iss >> y;
   if (iss.fail())
     return {};
-  if (!(0 <= y && y < Y))
+  if (!(0 <= y && y <= Y-1))
     return {};
 
   Spawner *spawner = Spawner::from_string(type_name, std::make_pair(0, X-1), std::make_pair(0, Y-1));
@@ -41,6 +41,15 @@ void Editor::update_map() {
   for (auto it = data.cbegin(); it != data.cend(); ++it) {
     auto npc = it->second;
     map[npc->y][npc->x] = npc->get_symbol();
+  }
+}
+
+void Editor::print_map() {
+  update_map();
+  for (int y = 0; y < Y; ++y) {
+    for (int x = 0; x < X; ++x)
+      std::cout << map[y][x];
+    std::cout << std::endl;
   }
 }
 
@@ -88,6 +97,25 @@ void Editor::dump(const string &path) {
   outfile << *this;
 }
 
+unsigned modulo(int value, int m) {
+  int mod = value % m;
+  return mod < 0 ? mod + m : mod;
+}
+
+void Editor::move_npcs() {
+  for (auto it = data.begin(); it != data.end(); ++it) { 
+    auto npc = it->second;
+    auto dx_dy = npc->get_velocity();
+    int dx = rand() % (dx_dy + 1);
+    int dy = dx_dy - dx;
+    dx *= (rand() % 2) ? 1 : -1;
+    dy *= (rand() % 2) ? 1 : -1;
+    npc->x = modulo(npc->x + dx, X);
+    npc->y = modulo(npc->y + dy, Y);
+  }
+} 
+
+
 void Editor::fight() {
   Visitor *visitor = new FightVisitor;
 
@@ -124,14 +152,6 @@ void Editor::fight() {
   update_map();
 
   delete visitor;
-}
-
-void Editor::print_map() {
-  for (int y = 0; y < Y; ++y) {
-    for (int x = 0; x < X; ++x)
-      std::cout << map[y][x];
-    std::cout << std::endl;
-  }
 }
 
 void Editor::Attach(AbstractObserver *observer) { observer_list.push_back(observer); }

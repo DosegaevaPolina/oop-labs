@@ -10,8 +10,8 @@
 
 class AbstractObserver;
 
-#define X 40
-#define Y 20
+#define X 80
+#define Y 40
 
 class Editor {
 private:
@@ -32,6 +32,7 @@ public:
   friend std::ostream &operator<<(std::ostream &os, const Editor &ed);
   void dump(const string &path);
   void fight();
+  void move_npcs();
   void print_map();
   void Attach(AbstractObserver *observer);
   void Detach(AbstractObserver *observer);
