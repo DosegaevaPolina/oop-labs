@@ -13,7 +13,6 @@ int main() {
   }
 
   ed.print_map();
-  print('\n');
 
   for (int i = 0; i < 10; ++i) {
     std::thread t([](Editor &e) {

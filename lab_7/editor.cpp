@@ -1,4 +1,5 @@
 #include "editor.hpp"
+#include <shared_mutex>
 #include <sstream>
 #include <stdexcept>
 #include <thread>
@@ -111,6 +112,7 @@ unsigned modulo(int value, int m) {
 }
 
 void Editor::move_npcs() {
+  std::lock_guard<std::shared_mutex> l(data_mutex);
   for (auto it = data.begin(); it != data.end(); ++it) { 
     auto npc = it->second;
     auto dx_dy = npc->get_velocity();
@@ -141,7 +143,8 @@ void Editor::fight() {
       if (!npc->alive || !other_npc->alive)
         continue;
 
-      std::thread t([npc, visitor, other_npc]() {
+      std::thread t([npc, visitor, other_npc, this]() {
+        std::lock_guard<std::shared_mutex> l(data_mutex);
         npc->Accept(visitor, other_npc);
       });
       t.join();

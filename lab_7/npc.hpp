@@ -194,7 +194,7 @@ private:
       if (kills(npc,other)) {
         int attack = NPC::dice_roll(6);
         int defence = NPC::dice_roll(6);
-        // if (attack > defence)
+        if (attack > defence)
           other->alive = false;
       }
     }
@@ -202,7 +202,7 @@ private:
       if (kills(other,npc)) {
         int attack = NPC::dice_roll(6);
         int defence = NPC::dice_roll(6);
-        // if (attack > defence)
+        if (attack > defence)
           npc->alive = false;
       }
     }

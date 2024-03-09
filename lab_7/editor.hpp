@@ -6,6 +6,7 @@
 #include <map>
 #include <optional>
 #include <list>
+#include <shared_mutex>
 
 
 class AbstractObserver;
@@ -14,6 +15,7 @@ class AbstractObserver;
 class Editor {
 private:
   std::map<std::string, NPC*> data;
+  std::shared_mutex data_mutex;
   std::list<AbstractObserver*> observer_list;
   AbstractObserver *stdout_observer, *log_observer;
 
@@ -24,6 +26,7 @@ private:
 public:
   inline static const char background_symbol = BG;
   char map[Y][X];
+  std::shared_mutex map_mutex;
 
   Editor();
   Editor(const string &path, const string &log_path);
