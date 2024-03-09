@@ -53,6 +53,13 @@ void Editor::print_map() {
   }
 }
 
+Editor::Editor() {
+  update_map();
+
+  stdout_observer = new StdoutObserver(*this);
+  log_observer = nullptr;
+}
+
 Editor::Editor(const string &path, const string &log_path) {
   std::ifstream infile(path);
   if (!infile.is_open())
@@ -69,8 +76,8 @@ Editor::~Editor() {
   for (auto it = data.begin(); it != data.end(); ++it) {
     delete it->second;
   }
-  delete stdout_observer;
-  delete log_observer;
+  if (stdout_observer) delete stdout_observer;
+  if (log_observer) delete log_observer;
 }
 
 void Editor::from_stream(std::istream &in) {

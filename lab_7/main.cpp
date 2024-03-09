@@ -1,16 +1,10 @@
 #include <iostream>
-#include <filesystem>
+#include <thread>
 #include "editor.hpp"
 
 
-namespace fs = std::filesystem;
-
 int main() {
-  auto pwd = fs::current_path();
-  Editor ed(pwd / "lab_7/npc.txt", pwd / "log.txt");
-
-  ed.add_npc(new Elf("Laslo", 3, 3));
-  std::cout << ed << std::endl;
+  Editor ed;
 
   for (int i = 0; i < 16; ++i) {
     Spawner *spawner = Spawner::random_spawner(ed.map);
@@ -22,13 +16,14 @@ int main() {
   ed.fight();
   std::cout << std::endl;
 
-  for (int i = 0; i < 3; ++i) {
+  for (int i = 0; i < 10; ++i) {
     ed.move_npcs();
     ed.print_map();
     ed.fight();
     std::cout << std::endl;
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
   }
 
-  std::cout << std::endl << ed;
+  std::cout << "\nSurvivors:\n" << ed;
   ed.dump("lab_6/out_npc.txt");
 }

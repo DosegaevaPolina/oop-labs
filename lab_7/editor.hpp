@@ -25,6 +25,7 @@ public:
   inline static const char background_symbol = BG;
   char map[Y][X];
 
+  Editor();
   Editor(const string &path, const string &log_path);
   ~Editor();
   void add_npc(NPC *npc);
